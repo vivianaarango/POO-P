@@ -22,6 +22,12 @@ class Game extends Model
 
     /**
      *
+     * @var integer
+     */
+    public $difficulty;
+
+    /**
+     *
      * @var String
      */
     public $register_date;

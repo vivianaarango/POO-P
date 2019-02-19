@@ -45,4 +45,18 @@ class Question extends Model
         $prepare->execute();
         return $prepare;
     }
+
+    public function getTotalAnswerSuccess($id_game, $difficulty)
+    {
+        $sql = " SELECT COUNT(qg.id) total           
+                 FROM question_game qg
+                 INNER JOIN question q ON qg.id_question = q.id_question
+                 WHERE qg.id_game = $id_game AND qg.result = TRUE AND q.difficulty = $difficulty";
+        $prepare = $this->getDi()->getShared("db")->prepare($sql);
+        $prepare->execute();
+        return $prepare;
+    }
+
+
+
 }

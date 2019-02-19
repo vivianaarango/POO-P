@@ -80,6 +80,7 @@ class UserController extends ControllerBase {
                             "message" => UserConstants::SAVE_USER_SUCCESS,
                             "status" => ControllerBase::SUCCESS
                         ));
+                        
                     } else {
                         $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
                             "return" => false,
