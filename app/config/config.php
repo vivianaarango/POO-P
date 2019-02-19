@@ -3,12 +3,12 @@
 
 return new \Phalcon\Config(array(
     'database' => array(
-         'schema'   => 'public',
-         'adapter'  => 'Postgresql',
-         'host'     => 'localhost',
-         'username' => '',
-         'password' => '*',
-         'dbname'   => '',
+        'schema'   => 'public',
+        'adapter'  => 'Postgresql',
+        'host'     => '127.0.0.1',
+        'username' => 'postgres',
+        'password' => '123456',
+        'dbname'   => 'poop',
     ),
 
     'application' => array(

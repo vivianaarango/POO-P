@@ -5,44 +5,32 @@ use \Phalcon\Mvc\Model;
 /**
  * 
  */
-class User extends Model
+class Answer extends Model
 {
 
     /**
      *
      * @var integer
      */
-    public $id_user;
+    public $id_answer;
 
     /**
      *
      * @var string
      */
-    public $name;
+    public $answer;
 
     /**
      *
-     * @var String
+     * @var boolean
      */
-    public $phone;
-    
-    /**
-     *
-     * @var String
-     */
-    public $email;
-    
-    /**
-     *
-     * @var String
-     */
-    public $password;
+    public $is_correct;
 
     /**
      *
-     * @var String
+     * @var integer
      */
-    public $register_date;
+    public $id_question;
 
     /**
      * Initialize method for model.
@@ -51,5 +39,7 @@ class User extends Model
     {
         $this->setSchema("public");
     }
+
+    
 
 }

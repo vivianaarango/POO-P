@@ -5,38 +5,20 @@ use \Phalcon\Mvc\Model;
 /**
  * 
  */
-class User extends Model
+class Game extends Model
 {
 
     /**
      *
      * @var integer
      */
+    public $id_game;
+
+    /**
+     *
+     * @var integer
+     */
     public $id_user;
-
-    /**
-     *
-     * @var string
-     */
-    public $name;
-
-    /**
-     *
-     * @var String
-     */
-    public $phone;
-    
-    /**
-     *
-     * @var String
-     */
-    public $email;
-    
-    /**
-     *
-     * @var String
-     */
-    public $password;
 
     /**
      *

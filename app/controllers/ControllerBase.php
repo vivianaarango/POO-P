@@ -13,6 +13,7 @@ class ControllerBase extends Controller {
     const FAILED = 409;
     const FAILED_MESSAGE = "FAILED OPERATION";
     const SUCCESS_MESSAGE = "SUCCESS OPERATION";
+    const DIFFICULTY =  array( 1 => 'FACIL', 2 => 'MEDIO' , 3 => 'DIFICIL');
 
     /**
      *
