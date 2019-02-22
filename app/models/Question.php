@@ -57,6 +57,27 @@ class Question extends Model
         return $prepare;
     }
 
+    public function getTotalAnswer($id_game, $difficulty)
+    {
+        $sql = " SELECT COUNT(qg.id) total           
+                 FROM question_game qg
+                 INNER JOIN question q ON qg.id_question = q.id_question
+                 WHERE qg.id_game = $id_game AND q.difficulty = $difficulty";
+        $prepare = $this->getDi()->getShared("db")->prepare($sql);
+        $prepare->execute();
+        return $prepare;
+    }
 
+    public function getQuestionGame($id_game, $difficulty)
+    {
+        $sql = " SELECT *
+                 FROM question_game qg
+                 INNER JOIN question q ON qg.id_question = q.id_question
+                 WHERE qg.id_game = $id_game AND q.difficulty = $difficulty and qg.result = false
+                 ORDER BY random() LIMIT 1 ";
+        $prepare = $this->getDi()->getShared("db")->prepare($sql);
+        $prepare->execute();
+        return $prepare;
+    }
 
 }

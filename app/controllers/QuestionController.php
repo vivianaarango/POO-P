@@ -29,18 +29,37 @@ class QuestionController extends ControllerBase {
                 if(isset($dataRequest->id_game)){
 
                     $game_id = $dataRequest->id_game;
-                    goto getQuestion;
+                    $result = $this->getGameResult($game_id, $dataRequest->difficulty);
 
-                    getQuestion: {
-                        $q = ($question->getQuestion($dataRequest->difficulty))->fetchAll();
+                    if($result['correct'] == 15){
 
-                        $question_game = QuestionGame::findFirst(array(
-                            "conditions" => "id_question = ?1",
-                            "bind" => array(1 => $q[0]['id_question'])
+                        $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
+                            "return" => true,
+                            "data" => $data,
+                            "message" => sprintf( QuestionConstants::LEVEL_SUCCESS, ControllerBase::DIFFICULTY[$dataRequest->difficulty]),
+                            "status" => ControllerBase::SUCCESS
                         ));
+                        exit;
+                        
+                    } elseif($result['total'] == 15) {
 
-                        if(isset($question_game->id)){
-                            goto getQuestion;
+                        $q = ($question->getQuestionGame($game_id, $dataRequest->difficulty))->fetchAll();
+   
+                    } else {
+
+                        goto getQuestion;
+
+                        getQuestion: {
+                            $q = ($question->getQuestion($dataRequest->difficulty))->fetchAll();
+
+                            $question_game = QuestionGame::findFirst(array(
+                                "conditions" => "id_question = ?1",
+                                "bind" => array(1 => $q[0]['id_question'])
+                            ));
+
+                            if(isset($question_game->id)){
+                                goto getQuestion;
+                            }
                         }
                     }
 
@@ -64,11 +83,9 @@ class QuestionController extends ControllerBase {
                     }
 
                     $game_id = $game->id_game;
+                    $result = $this->getGameResult($game_id, $dataRequest->difficulty);
                     
                 }
-
-                $validate = $this->validateGameDifficulty($game_id, $dataRequest->difficulty);
-                print_r($validate);die;
 
                 if (count($q) > 0){
                     $answer = Answer::find(array(
@@ -91,7 +108,8 @@ class QuestionController extends ControllerBase {
                             "id_game" => $game_id,
                             "id_question" => $q[0]['id_question'],
                             "question" => $q[0]['question'],
-                            "answers" => $answers
+                            "answers" => $answers,
+                            "progress" => $result
                         ];
 
                         $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
@@ -123,17 +141,22 @@ class QuestionController extends ControllerBase {
         }
     }
 
-    public function validateGameDifficulty($id_game, $difficulty){
+    /*
+    * Obtener los resultados del juego actual
+    */
+    public function getGameResult($id_game, $difficulty){
 
         $question = new Question;
-        $answer_correct = ($question->getTotalAnswerSuccess($id_game, $difficulty))->fetchAll();
+        $correct_answer = ($question->getTotalAnswerSuccess($id_game, $difficulty))->fetchAll();
+        $total_answer = ($question->getTotalAnswer($id_game, $difficulty))->fetchAll();
 
-        if($answer_correct[0][0] == 15){
-            return false;
-        } else {
-            return $answer_correct[0][0];
-        }
+        $data = [
+            "correct" => $correct_answer[0][0],
+            "fail" => $total_answer[0][0] - $correct_answer[0][0],
+            "total" => $total_answer[0][0]
+        ];
 
+        return $data;
     }
 
 

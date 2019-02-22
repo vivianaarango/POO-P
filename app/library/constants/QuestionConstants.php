@@ -16,4 +16,7 @@ class QuestionConstants {
 
     const ANSWER_NOT_FOUND = 'No se encontro respuesta.';
     const ANSWER_FOUND = 'Respuesta encontrada.';
+
+    const LEVEL_SUCCESS = 'Haz pasado el nivel %m ';
+
 }
