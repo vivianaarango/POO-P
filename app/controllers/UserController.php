@@ -51,7 +51,7 @@ class UserController extends ControllerBase {
 
                     if ($user->save()){
 
-                        for ($i = 1; $i <= 3; $i++) {
+                        for ($i = 1; $i <= 4; $i++) {
                             $user_dif = new UserDifficulty;
                             $user_dif->id_user = $user->id_user;
                             $user_dif->difficulty = $i;
@@ -124,15 +124,23 @@ class UserController extends ControllerBase {
 
                     $user_dif = UserDifficulty::find(array(
                         "conditions" => "id_user = ?1",
-                        "bind" => array(1 => $user->id_user)
+                        "bind" => array(1 => $user->id_user),
+                        "order" => "difficulty ASC"
                     ));
                     
 
                     foreach($user_dif as $item){
+
+                        if ( $item->is_approved == true ){
+                            $level = '1';
+                        } else {
+                            $level = '0';
+                        }
+                        
                         $difficulty[] = [
                             "id" => $item->id,
                             "difficulty" => $item->difficulty,
-                            "is_approved" => $item->is_approved
+                            "is_approved" => $level
                         ];
                     }
 

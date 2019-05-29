@@ -12,7 +12,7 @@ class QuestionController extends ControllerBase {
         $dataRequest = $this->request->getJsonPost();
 
         $fields = array(
-            "difficulty", //3 = Dificil, 2 = Medio, 1 = facil
+            "difficulty", //4 = Experto 3 = Dificil, 2 = Medio, 1 = facil
             "id_user"
         );
 
@@ -30,33 +30,46 @@ class QuestionController extends ControllerBase {
 
                     $game_id = $dataRequest->id_game;
                     $result = $this->getGameResult($game_id, $dataRequest->difficulty);
+                   
+                    if($result['correct'] == 10){
 
-                    if($result['correct'] == 15){
+                        if ( $dataRequest->difficulty != 4) {
+                            $difficulty = $dataRequest->difficulty+1;
+
+                            $user_difficulty = UserDifficulty::findFirst(array(
+                                "conditions" => "id_user = ?1 and difficulty = ?2",
+                                "bind" => array(1 => $dataRequest->id_user,
+                                                2 => $difficulty)
+                            ));
+                      
+                            $user_difficulty->is_approved = true;
+                            $user_difficulty->save();
+                        }
 
                         $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
                             "return" => true,
-                            "data" => $data,
-                            "message" => sprintf( QuestionConstants::LEVEL_SUCCESS, ControllerBase::DIFFICULTY[$dataRequest->difficulty]),
+                            "message" => "1",
                             "status" => ControllerBase::SUCCESS
                         ));
                         exit;
                         
-                    } elseif($result['total'] == 15) {
-
+                    } elseif($result['total'] == 10) {
+                        //busca preguntas contestadas incorrectamente 
                         $q = ($question->getQuestionGame($game_id, $dataRequest->difficulty))->fetchAll();
    
                     } else {
-
+                        
                         goto getQuestion;
 
                         getQuestion: {
                             $q = ($question->getQuestion($dataRequest->difficulty))->fetchAll();
-
+                            
                             $question_game = QuestionGame::findFirst(array(
-                                "conditions" => "id_question = ?1",
-                                "bind" => array(1 => $q[0]['id_question'])
+                                "conditions" => "id_question = ?1 and id_game = ?2",
+                                "bind" => array(1 => $q[0]['id_question'],
+                                                2 => $game_id)
                             ));
-
+                            
                             if(isset($question_game->id)){
                                 goto getQuestion;
                             }
@@ -208,7 +221,7 @@ class QuestionController extends ControllerBase {
                             $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
                                 "return" => true,
                                 "message" => QuestionConstants::ANSWER_FAIL,
-                                "status" => ControllerBase::SUCCESS
+                                "status" => ControllerBase::FAILED
                             ));
                         }
                     }
