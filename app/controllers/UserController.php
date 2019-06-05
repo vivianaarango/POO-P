@@ -22,8 +22,6 @@ class UserController extends ControllerBase {
             "image"
         );
 
-        $optional = array();
-
         if ($this->_checkFields($dataRequest, $fields, $optional)) {
 
             try {
