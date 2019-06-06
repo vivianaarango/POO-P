@@ -35,12 +35,13 @@ class ThemeController extends ControllerBase {
                             "type" => $item->type
                         ];
                     }
-
-                    $data[] = [
-                        "id_theme" => $value->id_theme,
-                        "name" => $value->name,
-                        "items" => $items
-                    ];
+                    if (count($items) > 0){
+                        $data[] = [
+                            "id_theme" => $value->id_theme,
+                            "name" => $value->name,
+                            "items" => $items
+                        ];
+                    }
                 }
 
                 $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
