@@ -8,4 +8,7 @@ class UserConstants {
     const LOGIN_USER_SUCCESS = 'Sesión iniciada correctamente.';
     const LOGIN_USER_FAILURE = 'Datos incorrectos.Intenta nuevamente.';
 
+    const CALENDAR_SUCCESS = 'Lista cargada correctamente.';
+    const CALENDAR_FAILURE = 'No tienes eventos agendados';
+
 }
