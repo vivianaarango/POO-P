@@ -11,4 +11,7 @@ class UserConstants {
     const CALENDAR_SUCCESS = 'Lista cargada correctamente.';
     const CALENDAR_FAILURE = 'No tienes eventos agendados';
 
+    const CREATE_CALENDAR_SUCCESS = 'Agregado exitosamente.';
+    const CREATE_CALENDAR_FAILURE = 'No se ha podido agregar';
+
 }
