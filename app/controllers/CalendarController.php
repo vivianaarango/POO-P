@@ -20,17 +20,24 @@ class CalendarController extends ControllerBase {
 
             try {
 
-                $calendar = Calendar::find(array(
-                    "conditions" => "id_user = ?1",
-                    "bind" => array(1 => $dataRequest->id_user),
-                    "order" => "fecha"
-                ));
+                $calendar = new Calendar;
+                $calendar = $calendar->getCalendarList($dataRequest->id_user);
+                $calendar = $calendar->fetchAll();
 
                 if (count($calendar) > 0 ) {
 
+                    foreach ($calendar as $item) {
+                        $data[] = [
+                            "id_calendar" => $item['id_calendar'],
+                            "description" => $item['description'],
+                            "fecha" => $item['fecha'],
+                            "id_user" => $item['id_user']
+                        ];
+                    }
+       
                     $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
                         "return" => true,
-                        "data" => $calendar,
+                        "data" => $data,
                         "message" => UserConstants::CALENDAR_SUCCESS,
                         "status" => ControllerBase::SUCCESS
                     ));
