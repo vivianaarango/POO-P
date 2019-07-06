@@ -79,7 +79,7 @@ class CalendarController extends ControllerBase {
                 $calendar = new Calendar;
                 $calendar->description = $dataRequest->description;
                 $calendar->id_user = $dataRequest->id_user;
-                $calendar->date = $dataRequest->date;
+                $calendar->fecha = $dataRequest->date;
 
                 if ($calendar->save()){
                     $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
