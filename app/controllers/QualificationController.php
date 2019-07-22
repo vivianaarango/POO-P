@@ -85,6 +85,7 @@ class QualificationController extends ControllerBase {
 
                         $data[] = [
                             "id_subject" => $item->id_subject,
+                            "name" => $item->name,
                             "id_user" => $item->id_user,
                             "cuts" => $cuts,
                             "total" => $accumulated
