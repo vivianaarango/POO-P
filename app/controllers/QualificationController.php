@@ -51,7 +51,7 @@ class QualificationController extends ControllerBase {
                                 $cuts[] = [
                                     "id_qualification" => $value->id_qualification,
                                     "cut" => 'Corte '.$value->cut,
-                                    "qualification" => $value->qualification,
+                                    "qualification" => round($value->qualification),
                                     "value" => $total,
                                     "is_calculed" => 0 
                                 ];
@@ -76,7 +76,7 @@ class QualificationController extends ControllerBase {
                                 $cuts[] = [
                                     "id_qualification" => 0,
                                     "cut" => 'Corte '.$cut,
-                                    "qualification" => $note,
+                                    "qualification" => round($note),
                                     "value" => $quantity,
                                     "is_calculed" => 1 // 1 = calculado
                                 ];
