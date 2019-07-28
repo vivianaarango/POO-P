@@ -157,7 +157,7 @@ class QualificationController extends ControllerBase {
                         $subject->save();
                     }
 
-                    if (isset($dataRequest->cut_one)){
+                    if (isset($dataRequest->cut_one) && $dataRequest->cut_one != -1){
                         $val_one = Qualification::findFirst(array(
                             "conditions" => "id_subject = ?1 and cut = 1",
                             "bind" => array(1 => $subject->id_subject)
@@ -172,7 +172,7 @@ class QualificationController extends ControllerBase {
                         }
                     }
                     
-                    if (isset($dataRequest->cut_two)){
+                    if (isset($dataRequest->cut_two) && $dataRequest->cut_two != -1){
                         $val_two = Qualification::findFirst(array(
                             "conditions" => "id_subject = ?1 and cut = 2",
                             "bind" => array(1 => $subject->id_subject)
@@ -187,7 +187,7 @@ class QualificationController extends ControllerBase {
                         }
                     }
 
-                    if (isset($dataRequest->cut_three)){
+                    if (isset($dataRequest->cut_three) && $dataRequest->cut_three != -1){
                         $val_three = Qualification::findFirst(array(
                             "conditions" => "id_subject = ?1 and cut = 3",
                             "bind" => array(1 => $subject->id_subject)
