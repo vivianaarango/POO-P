@@ -14,6 +14,8 @@ class ControllerBase extends Controller {
     const FAILED_MESSAGE = "FAILED OPERATION";
     const SUCCESS_MESSAGE = "SUCCESS OPERATION";
     const DIFFICULTY =  array( 1 => 'Facíl', 2 => 'Medio' , 3 => 'Dificil');
+    const URLMAIL = __DIR__ . '/../library/PHPMailer/PHPMailerAutoload.php';
+    const URLMAILCONFIG = __DIR__ . '/../library/PHPMailer/phpmailer_config.php';  
 
     /**
      *
