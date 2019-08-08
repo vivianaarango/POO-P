@@ -195,11 +195,11 @@ class UserController extends ControllerBase {
 
                     include_once ControllerBase::URLMAIL;
                     include_once ControllerBase::URLMAILCONFIG;
-
+    
                     $code = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTVWXYZ" . uniqid()),0,6);
 
                     $user->code = $code;
-                    $user->save();
+                    //$user->save();
                     
                     $msg = file_get_contents('../public/mailing/mail.html');
                     $msg = str_replace("[1]", $user->name, $msg);
@@ -222,7 +222,54 @@ class UserController extends ControllerBase {
                 } else {
                     $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
                         "return" => false,
-                        "message" => UserConstants::LOGIN_USER_FAILURE,
+                        "message" => UserConstants::SEND_EMAIL_FAILURE,
+                        "status" => ControllerBase::FAILED
+                    ));
+                }
+
+            } catch (Exception $e) {
+                $this->logError($e, $dataRequest);
+            }
+        }
+    }
+
+    public function changePasswordAction() {
+
+        $dataRequest = $this->request->getJsonPost();
+
+        $fields = array(
+            "email",
+            "password",
+            "code"
+        );
+
+        $optional = array();
+
+        if ($this->_checkFields($dataRequest, $fields)) {
+
+            try {
+
+                $user = User::findFirst(array(
+                    "conditions" => "email = ?1 and code = ?2",
+                    "bind" => array(1 => $dataRequest->email,
+                                    2 => $dataRequest->code)
+                ));
+
+                if (isset($user->id_user)){
+
+                    $user->password = $dataRequest->password;
+                    $user->save();
+                    
+                    $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
+                        "return" => true,
+                        "message" => UserConstants::PASSWORD_UPDATE_SUCCESS,
+                        "status" => ControllerBase::SUCCESS
+                    ));
+
+                } else {
+                    $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
+                        "return" => false,
+                        "message" => UserConstants::PASSWORD_UPDATE_FAILURE,
                         "status" => ControllerBase::FAILED
                     ));
                 }

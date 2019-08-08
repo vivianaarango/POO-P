@@ -14,6 +14,10 @@ class UserConstants {
     const CREATE_CALENDAR_SUCCESS = 'Agregado exitosamente.';
     const CREATE_CALENDAR_FAILURE = 'No se ha podido agregar';
 
-    const SEND_EMAIL_SUCCESS = 'Se ha enviado un correo electronico con un codigo de verificacion';
+    const SEND_EMAIL_SUCCESS = 'Se ha enviado un correo electronico con un código de verificación';
+    const SEND_EMAIL_FAILURE = 'No se ha podido enviar el código de verificación';
 
+    const PASSWORD_UPDATE_SUCCESS = 'Hemos actualizado tu contraseña correctamente';
+    const PASSWORD_UPDATE_FAILURE = 'Código de verificación incorrecto';
+    
 }

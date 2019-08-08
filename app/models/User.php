@@ -45,6 +45,12 @@ class User extends Model
     public $register_date;
 
     /**
+     *
+     * @var String
+     */
+    public $code;
+
+    /**
      * Initialize method for model.
      */
     public function initialize()
