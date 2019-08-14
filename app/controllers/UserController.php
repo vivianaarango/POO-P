@@ -199,27 +199,17 @@ class UserController extends ControllerBase {
                     $user->code = $code;
                     //$user->save();
 
-                    if ( $user->save()){
-                        exec('/home/poop/public_html/api_poop/public/push/sendMail.php '.$user->id_user.' > /dev/null & ',$output,$return);
-                    } else {
-                        $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
-                            "return" => false,
-                            "message" => UserConstants::SEND_EMAIL_FAILURE,
-                            "status" => ControllerBase::FAILED
-                        ));
-                    }
-                    
-                    // $msg = file_get_contents('../public/mailing/mail.html');
-                    // $msg = str_replace("[1]", $user->name, $msg);
-                    // $msg = str_replace("[2]", $code, $msg);
-                    // $mail->From = "poopsistem2019@gmail.com";
-                    // $mail->FromName = 'POOP';
-                    // $mail->Subject = "Verificacion de usuario";
-                    // $mail->AltBody = "Verificacion de usuario";
-                    // $mail->MsgHTML($msg);
-                    // $mail->AddAddress($user->email, $user->name);
-                    // $mail->IsHTML(true);
-                    // $mail->send();
+                    $msg = file_get_contents('../public/mailing/mail.html');
+                    $msg = str_replace("[1]", $user->name, $msg);
+                    $msg = str_replace("[2]", $code, $msg);
+                    $mail->From = "poopsistem2019@gmail.com";
+                    $mail->FromName = 'POOP';
+                    $mail->Subject = "Verificacion de usuario";
+                    $mail->AltBody = "Verificacion de usuario";
+                    $mail->MsgHTML($msg);
+                    $mail->AddAddress($user->email, $user->name);
+                    $mail->IsHTML(true);
+                    $mail->send();
 
                     $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
                         "return" => true,
@@ -240,6 +230,76 @@ class UserController extends ControllerBase {
             }
         }
     }
+
+
+    /* public function restorePasswordMailAction() {
+
+        $dataRequest = $this->request->getJsonPost();
+
+        $fields = array(
+            "email"
+        );
+
+        if ($this->_checkFields($dataRequest, $fields)) {
+
+            try {
+
+                $user = User::findFirst(array(
+                    "conditions" => "email = ?1",
+                    "bind" => array(1 => $dataRequest->email)
+                ));
+
+                if (isset($user->id_user)){
+
+                    include_once ControllerBase::URLMAIL;
+                    include_once ControllerBase::URLMAILCONFIG;
+    
+                    $code = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTVWXYZ" . uniqid()),0,6);
+
+                    $user->code = $code;
+                    //$user->save();
+                    //exec('/home/viviana.arango/Documentos/Proyectos/PHP/poop/public/push/sendMail.php '.$user->id_user.' > /dev/null & ',$output,$return);
+                    /*if ( $user->save()){
+                        exec('/home/poop/public_html/api_poop/public/push/sendMail.php '.$user->id_user.' > /dev/null & ',$output,$return);
+                    } else {
+                        $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
+                            "return" => false,
+                            "message" => UserConstants::SEND_EMAIL_FAILURE,
+                            "status" => ControllerBase::FAILED
+                        ));
+                    }*/
+                    
+                     /* $msg = file_get_contents('../public/mailing/mail.html');
+                     $msg = str_replace("[1]", $user->name, $msg);
+                     $msg = str_replace("[2]", $code, $msg);
+                     $mail->From = "poopsistem2019@gmail.com";
+                     $mail->FromName = 'POOP';
+                     $mail->Subject = "Verificacion de usuario";
+                     $mail->AltBody = "Verificacion de usuario";
+                     $mail->MsgHTML($msg);
+                     $mail->AddAddress($user->email, $user->name);
+                     $mail->IsHTML(true);
+                     $mail->send();
+
+                    $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
+                        "return" => true,
+                        "message" => UserConstants::SEND_EMAIL_SUCCESS,
+                        "status" => ControllerBase::SUCCESS
+                    ));
+
+                } else {
+                    $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
+                        "return" => false,
+                        "message" => UserConstants::SEND_EMAIL_FAILURE,
+                        "status" => ControllerBase::FAILED
+                    ));
+                }
+
+            } catch (Exception $e) {
+                $this->logError($e, $dataRequest);
+            }
+        }
+    } */ 
 
     public function sendEmailAction($id_user){
 
