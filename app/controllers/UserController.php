@@ -180,8 +180,6 @@ class UserController extends ControllerBase {
             "email"
         );
 
-        $optional = array();
-
         if ($this->_checkFields($dataRequest, $fields)) {
 
             try {
@@ -199,7 +197,7 @@ class UserController extends ControllerBase {
                     $code = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTVWXYZ" . uniqid()),0,6);
 
                     $user->code = $code;
-                    //$user->save();
+                    $user->save();
                     
                     $msg = file_get_contents('../public/mailing/mail.html');
                     $msg = str_replace("[1]", $user->name, $msg);
