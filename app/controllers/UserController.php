@@ -200,15 +200,7 @@ class UserController extends ControllerBase {
                     //$user->save();
 
                     if ( $user->save()){
-                        $data = [
-                            "id_user" => "$user->id_user",
-                            "name" => $user->name,
-                            "email" => $user->email,
-                            "code" => $user->code,
-                        ];
-
-                        exec('/home/poop/public_html/api_poop/public/push/sendMail.php '.$data.' > /dev/null & ',$output,$return);
-                    
+                        exec('/home/poop/public_html/api_poop/public/push/sendMail.php '.$user->id_user.' > /dev/null & ',$output,$return);
                     } else {
                         $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
                             "return" => false,
@@ -249,21 +241,30 @@ class UserController extends ControllerBase {
         }
     }
 
-    public function sendEmailAction($datos){
-        include_once ControllerBase::URLMAIL;
-        include_once ControllerBase::URLMAILCONFIG;
-        
-        $msg = file_get_contents('../public/mailing/mail.html');
-        $msg = str_replace("[1]", $datos->name, $msg);
-        $msg = str_replace("[2]", $datos->code, $msg);
-        $mail->From = "poopsistem2019@gmail.com";
-        $mail->FromName = 'POOP';
-        $mail->Subject = "Verificacion de usuario";
-        $mail->AltBody = "Verificacion de usuario";
-        $mail->MsgHTML($msg);
-        $mail->AddAddress($datos->email, $datos->name);
-        $mail->IsHTML(true);
-        $mail->send();
+    public function sendEmailAction($id_user){
+
+        $user = User::findFirst(array(
+            "conditions" => "email = ?1",
+            "bind" => array(1 => $id_user)
+        ));
+
+
+        if (isset($user->id_user)){
+            include_once ControllerBase::URLMAIL;
+            include_once ControllerBase::URLMAILCONFIG;
+            
+            $msg = file_get_contents('../public/mailing/mail.html');
+            $msg = str_replace("[1]", $user->name, $msg);
+            $msg = str_replace("[2]", $user->code, $msg);
+            $mail->From = "poopsistem2019@gmail.com";
+            $mail->FromName = 'POOP';
+            $mail->Subject = "Verificacion de usuario";
+            $mail->AltBody = "Verificacion de usuario";
+            $mail->MsgHTML($msg);
+            $mail->AddAddress($user->email, $user->name);
+            $mail->IsHTML(true);
+            $mail->send();
+        }
     }
 
     public function changePasswordAction() {
