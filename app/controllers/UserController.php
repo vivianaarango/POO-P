@@ -142,12 +142,47 @@ class UserController extends ControllerBase {
                         ];
                     }
 
+                    $game = new Game;
+                    $countSuccess_1 = ($game->countAnswerTrue($user->id_user, 1))->fetchAll();
+                    $countSuccess_2 = ($game->countAnswerTrue($user->id_user, 2))->fetchAll();
+                    $countSuccess_3 = ($game->countAnswerTrue($user->id_user, 3))->fetchAll();
+                    $countSuccess_4 = ($game->countAnswerTrue($user->id_user, 4))->fetchAll();
+
+                    $countTotal_1 = ($game->countAnswer($user->id_user, 1))->fetchAll();
+                    $countTotal_2 = ($game->countAnswer($user->id_user, 2))->fetchAll();
+                    $countTotal_3 = ($game->countAnswer($user->id_user, 3))->fetchAll();
+                    $countTotal_4 = ($game->countAnswer($user->id_user, 4))->fetchAll();
+
+                    if ($countTotal_1[0]['count'] != 0)
+                        $percentage_1 = ($countSuccess_1[0]['count']*100)/$countTotal_1[0]['count'];
+                    else
+                        $percentage_1 = 0;
+                        
+                    if ($countTotal_2[0]['count'] != 0)
+                        $percentage_2 = ($countSuccess_2[0]['count']*100)/$countTotal_2[0]['count'];
+                    else
+                        $percentage_2 = 0;
+
+                    if ($countTotal_3[0]['count'] != 0)
+                        $percentage_3 = ($countSuccess_3[0]['count']*100)/$countTotal_3[0]['count'];
+                    else
+                        $percentage_3 = 0;
+                        
+                    if ($countTotal_4[0]['count'] != 0)
+                        $percentage_4 = ($countSuccess_4[0]['count']*100)/$countTotal_4[0]['count'];
+                    else
+                        $percentage_4 = 0;
+
                     $data = [
                         "id_user" => "$user->id_user",
                         "name" => $user->name,
                         "email" => $user->email,
                         "image" => $user->image,
-                        "difficulty" => $difficulty
+                        "difficulty" => $difficulty,
+                        "result_1" => round($percentage_1),
+                        "result_2" => round($percentage_2),
+                        "result_3" => round($percentage_3),
+                        "result_4" => round($percentage_4)
                     ];
 
                     $this->setJsonResponse(ControllerBase::SUCCESS, ControllerBase::SUCCESS_MESSAGE, array(
