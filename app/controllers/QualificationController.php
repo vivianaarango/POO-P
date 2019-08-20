@@ -131,7 +131,7 @@ class QualificationController extends ControllerBase {
             "cut_one",
             "cut_two",
             "cut_three",
-            "id_subject"
+            "subject"
         );
 
         if ($this->_checkFields($dataRequest, $fields, $optionals)) {
@@ -145,18 +145,21 @@ class QualificationController extends ControllerBase {
 
                 if (count($subjects) < 10){
 
-                    if (isset($dataRequest->id_subject)){
+                    if (isset($dataRequest->subject)){
                         $subject = Subject::findFirst(array(
-                            "conditions" => "id_subject = ?1",
-                            "bind" => array(1 => $dataRequest->id_subject)
+                            "conditions" => "name = ?1 and id_user = ?2",
+                            "bind" => array(1 => $dataRequest->subject,
+                                            2 => $dataRequest->id_user)
                         ));
+
                     } else {
                         $subject = new Subject;
                         $subject->id_user = $dataRequest->id_user;
                         $subject->name = $dataRequest->name;
                         $subject->save();
                     }
-
+                    
+               
                     if (isset($dataRequest->cut_one) && $dataRequest->cut_one != -1){
                         $val_one = Qualification::findFirst(array(
                             "conditions" => "id_subject = ?1 and cut = 1",
@@ -169,6 +172,9 @@ class QualificationController extends ControllerBase {
                             $qualification->cut = 1;
                             $qualification->qualification = $dataRequest->cut_one;
                             $qualification->save();
+                        } else {
+                            $val_one->qualification = $dataRequest->cut_one;
+                            $val_one->save();
                         }
                     }
                     
@@ -184,6 +190,9 @@ class QualificationController extends ControllerBase {
                             $qualification->cut = 2;
                             $qualification->qualification = $dataRequest->cut_two;
                             $qualification->save();
+                        } else {
+                            $val_two->qualification = $dataRequest->cut_two;
+                            $val_two->save();
                         }
                     }
 
@@ -199,6 +208,9 @@ class QualificationController extends ControllerBase {
                             $qualification->cut = 3;
                             $qualification->qualification = $dataRequest->cut_three;
                             $qualification->save();
+                        } else {
+                            $val_three->qualification = $dataRequest->cut_three;
+                            $val_three->save();
                         }
                     }
 
